@@ -20,16 +20,33 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        // Instantiate the bullet prefab
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 50))
+        {
+            // Handle raycast hit
+            Debug.Log("Raycast hit object: " + hit.collider.gameObject.name);
+
+            // Example: If the hit object has a Rigidbody component, apply a force
+            Zombie zombie = hit.collider.GetComponent<Zombie>();
+            if (zombie != null)
+            {
+                zombie.Die();
+            }
+        }
+
+
+        /*
         GameObject newBullet = Instantiate(bulletPrefab, gunTip.position, gunTip.rotation);
         Rigidbody bulletRigidbody = newBullet.GetComponent<Rigidbody>();
-
-        // Set the velocity of the bullet
+        // Bullet bullet= newBullet.GetComponent<Bullet>();
         bulletRigidbody.velocity = newBullet.transform.forward * bulletSpeed;
 
         Observable.Timer(TimeSpan.FromSeconds(10))
         .Subscribe(_ => Destroy(newBullet))
         .AddTo(newBullet);
+        */
     }
 }
 
